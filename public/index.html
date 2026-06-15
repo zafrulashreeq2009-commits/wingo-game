@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+<meta charset="UTF-8">
+<title>WinGo Demo</title>
+<link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<div class="card">
+    <h2>WIN GO DEMO</h2>
+
+    <div class="balance" id="balance">RM 0.00</div>
+
+    <button onclick="login()">LOGIN / CREATE ID</button>
+
+    <div class="box">
+        <input id="amount" type="number" value="10">
+        <button onclick="bet('BIG')">BIG</button>
+        <button onclick="bet('SMALL')">SMALL</button>
+    </div>
+
+    <div id="userId"></div>
+</div>
+
+<script src="app.js"></script>
+</body>
+</html>
