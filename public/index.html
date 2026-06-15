@@ -7,61 +7,293 @@
 <style>
 *{margin:0;padding:0;box-sizing:border-box;font-family:Arial,sans-serif;}
 body{background:#0f172a;padding:15px;color:white;}
-.card{background:#1e293b;padding:20px;border-radius:18px;margin-bottom:15px;box-shadow:0 5px 20px rgba(0,0,0,.3);}
-.balance{text-align:center;font-size:40px;font-weight:bold;color:#22c55e;margin-top:10px;}
-.balance-actions{display:flex;gap:10px;margin-top:12px;justify-content:center;}
-.balance-btn{flex:1;max-width:140px;padding:10px 0;border:none;border-radius:10px;font-size:15px;font-weight:bold;cursor:pointer;color:white;transition:opacity .2s,transform .15s;letter-spacing:.5px;}
-.balance-btn:active{transform:scale(.96);}
-.btn-deposit{background:#16a34a;box-shadow:0 3px 12px rgba(22,163,74,.35);}
-.btn-deposit:hover{background:#15803d;}
-.btn-withdraw{background:#dc2626;box-shadow:0 3px 12px rgba(220,38,38,.35);}
-.btn-withdraw:hover{background:#b91c1c;}
-.withdraw-limit-info{text-align:center;font-size:11px;color:#94a3b8;margin-top:6px;line-height:1.4;}
+.card{background:#1e293b;padding:20px;border-radius:18px;margin-bottom:15px;}
+h3{text-align:center;}
+.bal{text-align:center;font-size:40px;font-weight:bold;color:#22c55e;margin:10px 0;}
 .row{display:flex;gap:12px;margin-top:15px;}
 .box{flex:1;background:#334155;padding:15px;border-radius:15px;text-align:center;}
-.value{font-size:32px;font-weight:bold;margin-top:5px;}
-.timer{color:#f59e0b;transition:.3s;}
+.val{font-size:32px;font-weight:bold;margin-top:5px;}
+.timer{color:#f59e0b;}
 .big-timer{font-size:60px!important;color:#ef4444;animation:pulse .8s infinite;}
 @keyframes pulse{50%{transform:scale(1.15);}}
-.amount-label{font-size:15px;font-weight:bold;color:#e2e8f0;margin-bottom:2px;display:block;}
-.amount-input-wrapper{position:relative;display:flex;align-items:center;margin-top:8px;}
-.amount-input-wrapper .rm-badge{position:absolute;left:0;top:50%;transform:translateY(-50%);color:#fbbf24;font-weight:bold;font-size:14px;padding:8px 14px;z-index:2;pointer-events:none;letter-spacing:.5px;}
-.amount-input-wrapper input{padding-left:52px!important;border-radius:12px!important;}
+.iw{position:relative;margin-top:15px;}
+.iw span{position:absolute;left:14px;top:50%;transform:translateY(-50%);color:#fbbf24;font-weight:bold;font-size:16px;z-index:2;}
+.iw input{padding-left:50px!important;}
 input{width:100%;padding:15px;margin-top:10px;border:none;border-radius:12px;font-size:18px;background:#334155;color:white;}
-.actions{display:flex;gap:10px;margin-top:15px;}
+.acts{display:flex;gap:10px;margin-top:15px;}
 .btn{flex:1;padding:18px;border:none;border-radius:12px;font-size:22px;font-weight:bold;cursor:pointer;color:white;}
-.green{background:#22c55e;}
-.blue{background:#3b82f6;}
-.red{background:#dc2626;}
-.gray{background:#475569;}
-.btn:disabled{opacity:.5;cursor:not-allowed;}
-.result-box{text-align:center;margin-top:15px;padding:15px;background:#0f172a;border-radius:12px;display:none;}
-.result-number{font-size:80px;font-weight:bold;}
-.win{color:#22c55e;}
-.lose{color:#ef4444;}
-.history-table{width:100%;border-collapse:collapse;margin-top:10px;font-size:14px;}
-.history-table th{background:#334155;padding:10px 8px;text-align:center;font-size:13px;color:#94a3b8;font-weight:normal;border-bottom:2px solid #475569;}
-.history-table td{padding:10px 8px;text-align:center;border-bottom:1px solid rgba(255,255,255,.08);}
-.bet-big{color:#22c55e;font-weight:bold;}.bet-small{color:#3b82f6;font-weight:bold;}
-.amt-win{color:#22c55e;font-weight:bold;}.amt-lose{color:#ef4444;font-weight:bold;}
-.telegram{text-align:center;margin-top:10px;color:#94a3b8;}
-.telegram-float{position:fixed;bottom:24px;right:24px;width:56px;height:56px;background:#0088cc;border-radius:50%;box-shadow:0 4px 16px rgba(0,136,204,.45);display:flex;align-items:center;justify-content:center;cursor:pointer;z-index:9999;transition:transform .2s,box-shadow .2s;text-decoration:none;}
-.telegram-float:hover{transform:scale(1.1);box-shadow:0 6px 22px rgba(0,136,204,.65);}
-.telegram-float:active{transform:scale(.95);}
-.telegram-float svg{width:28px;height:28px;fill:white;pointer-events:none;}
-.modal{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.75);z-index:10000;align-items:center;justify-content:center;}
+.g{background:#22c55e;}.b{background:#3b82f6;}.r{background:#dc2626;}.gy{background:#475569;}
+.btn:disabled{opacity:.5;}
+.rb{text-align:center;margin-top:15px;padding:15px;background:#0f172a;border-radius:12px;display:none;}
+.rn{font-size:80px;font-weight:bold;}
+.w{color:#22c55e;}.l{color:#ef4444;}
+table{width:100%;border-collapse:collapse;margin-top:10px;font-size:14px;}
+th{background:#334155;padding:10px 8px;font-weight:normal;color:#94a3b8;font-size:13px;}
+td{padding:10px 8px;text-align:center;border-bottom:1px solid rgba(255,255,255,.08);}
+.bb{color:#22c55e;font-weight:bold;}.bs{color:#3b82f6;font-weight:bold;}
+.aw{color:#22c55e;font-weight:bold;}.al{color:#ef4444;font-weight:bold;}
+.modal{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.75);z-index:999;align-items:center;justify-content:center;}
 .modal.active{display:flex;}
-.modal-box{background:#1e293b;border-radius:18px;padding:24px;width:90%;max-width:380px;box-shadow:0 10px 40px rgba(0,0,0,.6);text-align:center;}
-.modal-box h3{margin-bottom:16px;font-size:20px;color:#e2e8f0;}
-.modal-amount-input-wrapper{position:relative;display:flex;align-items:center;margin-bottom:16px;}
-.modal-amount-input-wrapper .rm-badge{position:absolute;left:2px;top:50%;transform:translateY(-50%);color:#fbbf24;font-weight:bold;font-size:14px;padding:8px 14px;z-index:2;pointer-events:none;letter-spacing:.5px;}
-.modal-amount-input-wrapper input{padding-left:52px!important;margin-bottom:0!important;}
-.modal-box input{width:100%;padding:14px;border:2px solid #334155;border-radius:12px;font-size:18px;background:#0f172a;color:white;text-align:left;margin-bottom:16px;}
-.modal-box input:focus{outline:none;border-color:#3b82f6;}
-.modal-actions{display:flex;gap:10px;}
-.modal-btn{flex:1;padding:14px 0;border:none;border-radius:10px;font-size:16px;font-weight:bold;cursor:pointer;color:white;transition:opacity .2s;}
-.modal-btn:active{opacity:.8;}
-.modal-btn-confirm{background:#16a34a;}
+.mb{background:#1e293b;padding:24px;border-radius:18px;width:90%;max-width:380px;text-align:center;}
+.mb h3{margin-bottom:16px;}
+.mb input{width:100%;padding:14px;border:2px solid #334155;border-radius:12px;font-size:18px;background:#0f172a;color:white;text-align:center;margin-bottom:16px;}
+.ma{display:flex;gap:10px;}
+.mbt{flex:1;padding:14px;border:none;border-radius:10px;font-size:16px;font-weight:bold;cursor:pointer;color:white;}
+.mg{margin-top:12px;font-size:14px;min-height:20px;}
+.top{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;}
+.top span{font-size:13px;color:#94a3b8;}
+.lb{background:transparent;border:1px solid #ef4444;color:#ef4444;padding:6px 14px;border-radius:8px;font-size:13px;cursor:pointer;}
+.ab{background:transparent;border:1px solid #f59e0b;color:#f59e0b;padding:6px 14px;border-radius:8px;font-size:13px;cursor:pointer;margin-right:6px;}
+.hid{display:none;}
+.lc{max-width:400px;margin:50px auto;text-align:center;}
+.lc h1{color:#22c55e;font-size:28px;margin-bottom:8px;}
+.lc .sub{color:#94a3b8;font-size:13px;margin-bottom:24px;}
+.lc input{width:100%;padding:16px;margin-bottom:14px;border:2px solid #334155;border-radius:14px;font-size:17px;background:#0f172a;color:white;text-align:center;}
+.lc input:focus{outline:none;border-color:#22c55e;}
+.lc button{width:100%;padding:16px;border:none;border-radius:14px;font-size:18px;font-weight:bold;background:#22c55e;color:white;cursor:pointer;}
+.note{color:#64748b;font-size:12px;margin-top:16px;line-height:1.6;}
+.err{color:#ef4444;font-size:14px;margin-top:8px;min-height:20px;}
+.stats{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:10px 0;}
+.stats div{background:#334155;padding:12px;border-radius:10px;text-align:center;}
+.stats b{font-size:22px;color:#fbbf24;}
+.stats span{font-size:11px;color:#94a3b8;}
+.tg{position:fixed;bottom:24px;right:24px;width:56px;height:56px;background:#0088cc;border-radius:50%;box-shadow:0 4px 16px rgba(0,136,204,.45);display:flex;align-items:center;justify-content:center;cursor:pointer;z-index:9999;}
+.tg svg{width:28px;height:28px;fill:white;}
+</style>
+</head>
+<body>
+
+<div id="loginPage" class="lc">
+<h1>WIN GO</h1>
+<div class="sub">Masuk & Main</div>
+<input id="phone" type="tel" placeholder="Nombor Telefon">
+<input id="password" type="password" placeholder="Password (min 4 aksara)">
+<button onclick="doLogin()">LOGIN / DAFTAR</button>
+<div class="err" id="loginErr"></div>
+<div class="note">Pertama kali? Auto daftar!<br>Support: @moinsveit</div>
+</div>
+
+<div id="gamePage" class="hid">
+<div class="top">
+<span>ID: <b id="pid">---</b></span>
+<div><button class="ab" onclick="goAdmin()">ADMIN</button><button class="lb" onclick="logout()">KELUAR</button></div>
+</div>
+<div class="card">
+<h3>BALANCE</h3>
+<div class="bal" id="balance">RM 0.00</div>
+<div style="display:flex;gap:10px;margin-top:10px;">
+<button class="btn gy" onclick="openDep()">DEPOSIT</button>
+<button class="btn r" id="btnWd" onclick="openWd()">WITHDRAW</button>
+</div>
+<div style="text-align:center;font-size:11px;color:#94a3b8;margin-top:6px;" id="wdInfo"></div>
+<div class="row">
+<div class="box"><div>PERIOD</div><div class="val" id="period">-----</div></div>
+<div class="box"><div>COUNTDOWN</div><div class="val timer" id="timer">30</div></div>
+</div>
+<div class="rb" id="resultBox"><div class="rn" id="resultNum">-</div><div id="resultStatus"></div></div>
+<div class="iw"><span>RM</span><input id="amount" type="number" placeholder="Jumlah" value="10"></div>
+<div class="acts">
+<button class="btn g" id="btnBig">BIG (5-9)</button>
+<button class="btn b" id="btnSmall">SMALL (0-4)</button>
+</div>
+<div style="text-align:center;margin-top:10px;color:#94a3b8;">Support Telegram: @moinsveit</div>
+</div>
+<div class="card"><h3>HISTORY</h3>
+<table><thead><tr><th>PERIOD</th><th>BET</th><th>RESULT</th><th>AMOUNT</th></tr></thead>
+<tbody id="histBody"><tr><td colspan="4" style="color:#64748b;text-align:center;padding:20px;">Tiada rekod</td></tr></tbody></table>
+</div>
+</div>
+
+<div id="adminPage" class="hid">
+<div class="card" style="border:2px solid #ef4444;">
+<h1 align="center" style="color:#ef4444;">ADMIN PANEL</h1>
+<div class="stats"><div><b id="tp">0</b><span>Player</span></div><div><b id="tbal">RM 0</b><span>Total Baki</span></div></div>
+<div class="iw"><span>ID</span><input id="adminPid" placeholder="Player ID"></div>
+<div class="iw"><span>RM</span><input id="adminAmt" type="number" placeholder="Jumlah" value="50"></div>
+<button class="btn g" onclick="adminTopup()" style="width:100%;margin-bottom:8px;">TOPUP</button>
+<button class="btn r" onclick="adminDeduct()" style="width:100%;margin-bottom:8px;">TOLAK</button>
+<button class="btn gy" onclick="adminReset()" style="width:100%;margin-bottom:8px;">RESET WD</button>
+<button class="btn b" onclick="goGame()" style="width:100%;">BALIK GAME</button>
+<div class="mg" id="adminMsg"></div>
+</div>
+<div class="card"><h3>SENARAI PLAYER</h3>
+<input placeholder="Cari..." oninput="filterP()" id="searchP" style="margin-bottom:10px;">
+<table><thead><tr><th>ID</th><th>PHONE</th><th>BALANCE</th><th>WD</th></tr></thead>
+<tbody id="plist"><tr><td colspan="4" style="color:#64748b;padding:20px;">Loading...</td></tr></tbody></table>
+</div>
+</div>
+
+<div class="modal" id="depModal"><div class="mb">
+<h3>DEPOSIT</h3><p style="font-size:13px;color:#94a3b8;margin-bottom:12px;">Anda akan dibawa ke Telegram</p>
+<div class="iw"><span>RM</span><input id="depAmt" type="number" value="50" min="20"></div>
+<div class="ma"><button class="mbt gy" onclick="closeDep()">BATAL</button><button class="mbt g" onclick="doDep()">DEPOSIT</button></div>
+<div class="mg" id="depMsg"></div>
+</div></div>
+
+<div class="modal" id="wdModal"><div class="mb">
+<h3>WITHDRAW</h3><p style="font-size:13px;color:#94a3b8;margin-bottom:12px;">Min RM30 | Baki: <span id="wdRem">2</span>/2</p>
+<div class="iw"><span>RM</span><input id="wdAmt" type="number" value="50" min="30"></div>
+<div class="ma"><button class="mbt gy" onclick="closeWd()">BATAL</button><button class="mbt r" onclick="doWd()">WITHDRAW</button></div>
+<div class="mg" id="wdMsg"></div>
+</div></div>
+
+<div class="modal" id="adminLogin"><div class="mb">
+<h3>ADMIN LOGIN</h3><input id="adminPw" type="password" placeholder="Password">
+<div class="ma"><button class="mbt gy" onclick="closeAl()">BATAL</button><button class="mbt g" onclick="doAl()">LOGIN</button></div>
+<div class="mg" id="alMsg"></div>
+</div></div>
+
+<a class="tg" href="https://t.me/moinsveit" target="_blank">
+<svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.64 6.8c-.15 1.58-.8 5.42-1.13 7.19-.14.75-.42 1-.68 1.03-.58.05-1.02-.38-1.58-.75-.88-.58-1.38-.94-2.23-1.5-.99-.65-.35-1.01.22-1.59.15-.15 2.71-2.48 2.76-2.69.01-.03.01-.14-.05-.2-.06-.06-.15-.04-.22-.03-.1.02-1.62 1.03-4.58 3.03-.43.3-.83.44-1.18.43-.39-.01-1.14-.22-1.7-.4-.68-.22-1.23-.34-1.18-.71.03-.2.29-.4.8-.6 3.13-1.36 5.22-2.26 6.27-2.7 2.98-1.24 3.6-1.45 4-.15z"/></svg>
+</a>
+
+<script>
+const T=localStorage.getItem('t'),PID=localStorage.getItem('pid');
+let aT=localStorage.getItem('at')||'';
+if(T&&PID){document.getElementById('loginPage').classList.add('hid');document.getElementById('gamePage').classList.remove('hid');initGame();}
+
+async function api(u,b,tk){
+ const h={'Content-Type':'application/json'};if(tk)h['Authorization']='Bearer '+tk;
+ const o={method:b?'POST':'GET',headers:h};if(b)o.body=JSON.stringify(b);
+ const r=await fetch(u,o);return r.json();
+}
+
+async function doLogin(){
+ const ph=document.getElementById('phone').value.trim(),pw=document.getElementById('password').value.trim();
+ const er=document.getElementById('loginErr');er.textContent='';
+ if(!ph||!pw){er.textContent='Sila isi nombor & password.';return;}
+ try{
+  const d=await api('/api/login',{phone:ph,password:pw});
+  if(d.e){er.textContent=d.e;return;}
+  localStorage.setItem('t',d.token);localStorage.setItem('pid',d.pid);
+  window.location.reload();
+ }catch(e){er.textContent='Tiada sambungan server.';}
+}
+
+let bal=0,timer=30,period=Math.floor(Math.random()*90000)+10000,locked=false,bp=false,ub=null,ba=0;
+const be=document.getElementById('balance'),pe=document.getElementById('period'),te=document.getElementById('timer');
+const ae=document.getElementById('amount'),bB=document.getElementById('btnBig'),bS=document.getElementById('btnSmall');
+const rrb=document.getElementById('resultBox'),rrn=document.getElementById('resultNum'),rrs=document.getElementById('resultStatus');
+const hb=document.getElementById('histBody'),bWd=document.getElementById('btnWd');
+
+async function initGame(){
+ document.getElementById('pid').textContent=PID;
+ const m=await api('/api/me',null,T);
+ if(m.balance!==undefined){bal=m.balance;be.textContent='RM '+bal.toFixed(2);}
+ const w=await api('/api/wdinfo',null,T);
+ document.getElementById('wdInfo').innerHTML='Pengeluaran: <b style="color:#f59e0b">'+w.rem+'/'+w.max+'</b> hari ini';
+ bWd.disabled=w.rem===0;bWd.style.opacity=w.rem===0?'0.5':'1';
+ loadHist();
+}
+async function loadHist(){
+ const h=await api('/api/history',null,T);
+ if(!Array.isArray(h)||h.length===0){hb.innerHTML='<tr><td colspan="4" style="color:#64748b;padding:20px;">Tiada rekod</td></tr>';return;}
+ hb.innerHTML=h.map(r=>'<tr><td>'+r.period+'</td><td class="'+(r.bet_type==='BIG'?'bb':'bs')+'">'+r.bet_type+'</td><td>'+r.result_number+' ('+r.result_type+')</td><td class="'+(r.won?'aw':'al')+'">RM '+(r.won?'+'+r.win_amount.toFixed(2):'-'+r.bet_amount.toFixed(2))+'</td></tr>').join('');
+}
+function bet(type){
+ if(locked)return;const a=parseFloat(ae.value);
+ if(isNaN(a)||a<1)return alert('Min RM1');if(a>bal)return alert('Baki tak cukup.');
+ bal-=a;be.textContent='RM '+bal.toFixed(2);bp=true;ba=a;ub=type;
+ rrb.style.display='block';rrn.textContent='...';rrn.className='rn';rrs.textContent='';
+}
+async function resolve(){
+ if(!bp)return;
+ const d=await api('/api/bet',{period:String(period),type:ub,amount:ba},T);
+ if(d.e)return alert(d.e);
+ bal=d.nb;be.textContent='RM '+bal.toFixed(2);
+ rrn.textContent=d.rn;rrn.className='rn '+(d.won?'w':'l');
+ rrs.textContent=d.rt;rrs.style.color=d.rt==='BIG'?'#22c55e':'#3b82f6';
+ loadHist();initGame();bp=false;ub=null;ba=0;
+}
+bB.onclick=()=>bet('BIG');bS.onclick=()=>bet('SMALL');
+
+function openDep(){document.getElementById('depAmt').value=50;document.getElementById('depMsg').textContent='';document.getElementById('depModal').classList.add('active');}
+function closeDep(){document.getElementById('depModal').classList.remove('active');}
+async function doDep(){
+ const a=parseFloat(document.getElementById('depAmt').value);
+ if(isNaN(a)||a<20)return document.getElementById('depMsg').textContent='Min RM20.';
+ const d=await api('/api/deposit',{amount:a},T);
+ if(d.url)window.open(d.url,'_blank');closeDep();
+}
+async function openWd(){
+ const w=await api('/api/wdinfo',null,T);
+ if(w.rem===0)return alert('Had harian capai.');
+ document.getElementById('wdRem').textContent=w.rem;document.getElementById('wdMsg').textContent='';
+ document.getElementById('wdModal').classList.add('active');
+}
+function closeWd(){document.getElementById('wdModal').classList.remove('active');}
+async function doWd(){
+ const a=parseFloat(document.getElementById('wdAmt').value);
+ if(isNaN(a)||a<30)return document.getElementById('wdMsg').textContent='Min RM30.';
+ if(a>bal)return document.getElementById('wdMsg').textContent='Baki tak cukup.';
+ const d=await api('/api/withdraw',{amount:a},T);
+ if(d.e)return document.getElementById('wdMsg').textContent=d.e;
+ if(d.url)window.open(d.url,'_blank');closeWd();initGame();
+}
+
+function goAdmin(){
+ if(!aT){openAl();return;}
+ document.getElementById('gamePage').classList.add('hid');
+ document.getElementById('adminPage').classList.remove('hid');loadAdmin();
+}
+function goGame(){
+ document.getElementById('adminPage').classList.add('hid');
+ document.getElementById('gamePage').classList.remove('hid');
+}
+function openAl(){document.getElementById('adminLogin').classList.add('active');document.getElementById('alMsg').textContent='';}
+function closeAl(){document.getElementById('adminLogin').classList.remove('active');}
+async function doAl(){
+ const d=await api('/api/admin/login',{password:document.getElementById('adminPw').value});
+ if(d.e){document.getElementById('alMsg').textContent=d.e;return;}
+ aT=d.token;localStorage.setItem('at',aT);closeAl();
+ document.getElementById('gamePage').classList.add('hid');
+ document.getElementById('adminPage').classList.remove('hid');loadAdmin();
+}
+async function loadAdmin(){
+ const s=await api('/api/admin/stats',null,aT);
+ document.getElementById('tp').textContent=s.tp||0;document.getElementById('tbal').textContent='RM '+(parseFloat(s.tb)||0).toFixed(2);
+ const p=await api('/api/admin/players',null,aT);
+ window._ap=Array.isArray(p)?p:[];renderPL(window._ap);
+}
+function renderPL(arr){
+ const tb=document.getElementById('plist');
+ if(!arr||arr.length===0){tb.innerHTML='<tr><td colspan="4" style="color:#64748b;padding:20px;">Tiada player.</td></tr>';return;}
+ tb.innerHTML=arr.map(u=>'<tr><td style="color:#fbbf24;font-weight:bold;">'+u.player_id+'</td><td>'+u.phone+'</td><td>RM '+parseFloat(u.balance).toFixed(2)+'</td><td>'+(u.withdraw_count||0)+'/2</td></tr>').join('');
+}
+function filterP(){
+ const q=document.getElementById('searchP').value.toLowerCase();
+ const f=(window._ap||[]).filter(p=>p.player_id.toLowerCase().includes(q)||(p.phone||'').includes(q));
+ renderPL(f);
+}
+async function adminTopup(){
+ const pid=document.getElementById('adminPid').value.trim(),amt=parseFloat(document.getElementById('adminAmt').value);
+ if(!pid)return alert('Masukkan Player ID.');if(isNaN(amt)||amt<=0)return alert('Jumlah tak sah.');
+ const d=await api('/api/admin/topup',{pid,amount:amt},aT);
+ document.getElementById('adminMsg').textContent=d.msg||d.e;if(d.ok)loadAdmin();
+}
+async function adminDeduct(){
+ const pid=document.getElementById('adminPid').value.trim(),amt=parseFloat(document.getElementById('adminAmt').value);
+ if(!pid)return alert('Masukkan Player ID.');if(isNaN(amt)||amt<=0)return alert('Jumlah tak sah.');
+ const d=await api('/api/admin/deduct',{pid,amount:amt},aT);
+ document.getElementById('adminMsg').textContent=d.msg||d.e;if(d.ok)loadAdmin();
+}
+async function adminReset(){
+ const pid=document.getElementById('adminPid').value.trim();if(!pid)return alert('Masukkan Player ID.');
+ const d=await api('/api/admin/resetwd',{pid},aT);
+ document.getElementById('adminMsg').textContent=d.msg||d.e;if(d.ok)loadAdmin();
+}
+function logout(){localStorage.clear();window.location.reload();}
+
+setInterval(()=>{
+ if(document.getElementById('gamePage').classList.contains('hid'))return;
+ timer--;
+ if(timer<=5&&!locked){locked=true;te.classList.add('big-timer');bB.disabled=true;bS.disabled=true;ae.disabled=true;}
+ if(timer<0){resolve();timer=30;period=Math.floor(Math.random()*90000)+10000;locked=false;te.classList.remove('big-timer');bB.disabled=false;bS.disabled=false;ae.disabled=false;rrb.style.display='none';}
+ te.textContent=timer;pe.textContent=period;
+},1000);
+</script>
+</body>
+</html>.modal-btn-confirm{background:#16a34a;}
 .modal-btn-cancel{background:#475569;}
 .modal-message{margin-top:12px;font-size:14px;min-height:20px;}
 .modal-info{font-size:13px;color:#94a3b8;margin-bottom:12px;line-height:1.5;}
