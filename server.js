@@ -1,40 +1,88 @@
-const express = require('express');
-const cors = require('cors');
-const path = require('path');
-const jwt = require('jsonwebtoken');
-const bcrypt = require('bcryptjs');
-const Database = require('better-sqlite3');
-
+const express = require("express");
 const app = express();
-const PORT = process.env.PORT || 10000;
-const JWT_SECRET = process.env.JWT_SECRET || 'wingojwt2024secure';
-const ADMIN_PASS = process.env.ADMIN_PASSWORD || 'admin123';
+const path = require("path");
+const fs = require("fs");
 
-const db = new Database('wingo.db');
-db.pragma('journal_mode = WAL');
-db.exec("CREATE TABLE IF NOT EXISTS users (id INTEGER PRIMARY KEY AUTOINCREMENT, player_id TEXT UNIQUE NOT NULL, phone TEXT UNIQUE NOT NULL, password TEXT NOT NULL, balance REAL DEFAULT 0, withdraw_count INTEGER DEFAULT 0, withdraw_date TEXT DEFAULT '')");
-db.exec("CREATE TABLE IF NOT EXISTS history (id INTEGER PRIMARY KEY AUTOINCREMENT, player_id TEXT NOT NULL, period TEXT NOT NULL, bet_type TEXT NOT NULL, bet_amount REAL NOT NULL, result_number INTEGER NOT NULL, result_type TEXT NOT NULL, won INTEGER DEFAULT 0, win_amount REAL DEFAULT 0, balance_after REAL DEFAULT 0, created_at TEXT DEFAULT (datetime('now','localtime')))");
-
-app.use(cors());
 app.use(express.json());
-app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static("public"));
 
-function auth(req, res, next) {
-  const h = req.headers.authorization;
-  if (!h || !h.startsWith('Bearer ')) return res.status(401).json({ e: 'Login dulu.' });
-  try { req.user = jwt.verify(h.split(' ')[1], JWT_SECRET); next(); }
-  catch(e) { return res.status(401).json({ e: 'Token tamat.' }); }
+const DB_FILE = "./db.json";
+
+// ===== helper DB =====
+function readDB() {
+    return JSON.parse(fs.readFileSync(DB_FILE));
+}
+function writeDB(data) {
+    fs.writeFileSync(DB_FILE, JSON.stringify(data, null, 2));
 }
 
-function adminAuth(req, res, next) {
-  const h = req.headers.authorization;
-  if (!h || !h.startsWith('Bearer ')) return res.status(401).json({ e: 'Login admin dulu.' });
-  try { const d = jwt.verify(h.split(' ')[1], JWT_SECRET); if(d.role!=='admin') throw 0; next(); }
-  catch(e) { return res.status(401).json({ e: 'Akses ditolak.' }); }
-}
+// ===== LOGIN / CREATE USER ID =====
+app.post("/api/login", (req, res) => {
+    let db = readDB();
 
-function genId() {
-  const c = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+    const userId = "USR" + Math.floor(Math.random() * 999999);
+    const user = {
+        id: userId,
+        balance: 0,
+        createdAt: new Date()
+    };
+
+    db.users.push(user);
+    writeDB(db);
+
+    res.json(user);
+});
+
+// ===== GET USER =====
+app.get("/api/user/:id", (req, res) => {
+    let db = readDB();
+    const user = db.users.find(u => u.id === req.params.id);
+    res.json(user || null);
+});
+
+// ===== TOPUP (ADMIN ONLY DEMO) =====
+app.post("/api/topup", (req, res) => {
+    let db = readDB();
+    const { id, amount } = req.body;
+
+    let user = db.users.find(u => u.id === id);
+    if (!user) return res.json({ error: "User not found" });
+
+    user.balance += Number(amount);
+    writeDB(db);
+
+    res.json({ success: true, balance: user.balance });
+});
+
+// ===== WITHDRAW (DEDUCT BALANCE DEMO) =====
+app.post("/api/withdraw", (req, res) => {
+    let db = readDB();
+    const { id, amount } = req.body;
+
+    let user = db.users.find(u => u.id === id);
+    if (!user) return res.json({ error: "User not found" });
+
+    if (user.balance < amount) {
+        return res.json({ error: "Not enough balance" });
+    }
+
+    user.balance -= Number(amount);
+    writeDB(db);
+
+    res.json({ success: true, balance: user.balance });
+});
+
+// ===== ADMIN ADD ADS =====
+app.post("/api/ads", (req, res) => {
+    let db = readDB();
+    db.ads.push(req.body);
+    writeDB(db);
+    res.json({ success: true });
+});
+
+// ===== START SERVER =====
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => console.log("Server running on port " + PORT));  const c = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
   let r = '';
   for(let i=0;i<8;i++) r+=c.charAt(Math.floor(Math.random()*c.length));
   return r;
